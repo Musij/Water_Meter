@@ -5,7 +5,6 @@ int TX_Xbee=7;
 int RX_Xbee=8;
 SoftwareSerial Xbee(RX_Xbee,TX_Xbee);
 int pin_sensor=2;
-int pin_sleep=10;
 int number=1;
 int chrono=0;
 volatile int NbTopsFan;            //measuring the rising edges of the signal
@@ -22,8 +21,6 @@ void rpm ()                        //This is the function that the interupt call
 void setup() {
   // put your setup code here, to run once:
   pinMode(pin_sensor, INPUT);
-  pinMode(pin_sleep, OUTPUT);
-  digitalWrite(pin_sleep, HIGH);
   Serial.begin(9600);
   Xbee.begin(9600);  
   attachInterrupt(digitalPinToInterrupt(pin_sensor), rpm, RISING);  //and the interrupt is attached
@@ -62,8 +59,6 @@ void loop() {
  }
  if (Calc==0) {
      if(_loop==1){
-        digitalWrite(pin_sleep,LOW);
-        delay(1000);
         Serial.print ("Temps d'utilisation est de : ");
         Serial.print(chrono);
         Serial.print (" S\r\n");
@@ -78,8 +73,6 @@ void loop() {
         Xbee.print("la consommation d'eau est de : ");
         Xbee.print (qte, 2);
         Xbee.print (" litre\r\n");
-        delay(1000);
-        digitalWrite(pin_sleep,HIGH);
         _loop=0;
         debit=0;
         qte=0;
